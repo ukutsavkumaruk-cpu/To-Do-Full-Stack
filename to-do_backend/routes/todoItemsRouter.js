@@ -5,7 +5,7 @@ const {createTodoItem} = require('../controllers/todoControllers');
 
 const tasksRouter = express.Router();
 
-tasksRouter.get("/",createTodoItem)
+tasksRouter.post("/",createTodoItem)
 
 
 

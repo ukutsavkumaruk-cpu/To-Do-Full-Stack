@@ -4,6 +4,7 @@ const todoItemsRouter = require('./routes/todoItemsRouter')
 const { get404 } = require('./controllers/errors');
 const { default: mongoose } = require('mongoose');
 const DB_URL = "mongodb+srv://ukutsavkumaruk_db_user:utsav1311@airbnbv1.3ajox3i.mongodb.net/todo"
+const cors = require("cors");
 
 
 
@@ -15,6 +16,8 @@ const server = http.createServer(app);
 
 
 app.use(express.urlencoded())
+app.use(cors());
+app.use(express.json());
 app.use("/api/todo",todoItemsRouter)
 app.use(get404)
 

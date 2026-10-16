@@ -5,12 +5,13 @@ import WelcomeMsg from './components/WelcomeMsg'
 import {TodoItemsContext} from './store/todo-items-store'
 import './App.css'
 import { useReducer, useState } from 'react'
+import {addItemToServer} from './services/itemServices'
 
 const kaamsReducer=(kaams,action)=>{
   let newKaamsItems = kaams
   if(action.type === "NEW_KAAM")
     {
-      newKaamsItems = [...kaams, { task: action.payload.newTask, date: action.payload.newDate }];
+      newKaamsItems = [...kaams, { task: action.payload.todo.task, date: action.payload.todo.date, id: action.payload.todo._id}];
     }
     else if(action.type === "DELETE_KAAM")
     {
@@ -29,12 +30,13 @@ function App() {
 
   const [kaams, dispatchkaams] = useReducer(kaamsReducer,[])
 
-  const NewKaamAdd = (newTask,newDate)=>{
+  const NewKaamAdd = async (newTask,newDate)=>{
+
+    const serverItem = await addItemToServer(newTask,newDate)
     const newKaamAction = {
       type: "NEW_KAAM",
       payload: {
-        newTask:newTask,
-        newDate:newDate
+        todo : serverItem.todo,
       }
     }
     dispatchkaams(newKaamAction)

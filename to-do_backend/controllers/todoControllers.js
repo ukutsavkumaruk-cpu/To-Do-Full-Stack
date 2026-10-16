@@ -1,12 +1,12 @@
 const todoItems = require("../model/todoItems");
 
-exports.createTodoItem = (req, res , next) =>{
+exports.createTodoItem = async (req, res , next) =>{
   const{task,date} = req.body;
   const todoItem = new  todoItems({
     task,
     date
   })
-  todoItem.save()
+  await todoItem.save()
   .then(() =>{
     console.log("Item created");
   })
@@ -14,5 +14,5 @@ exports.createTodoItem = (req, res , next) =>{
     console.log("Error while item creation");
   })
  
-  res.status(201).json({message: "Todo Item Created"});
+  res.status(201).json({message: "Todo Item Created",todo:todoItem});
 }
