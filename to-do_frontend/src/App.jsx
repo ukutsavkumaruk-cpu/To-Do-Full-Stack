@@ -5,7 +5,7 @@ import WelcomeMsg from './components/WelcomeMsg'
 import {TodoItemsContext} from './store/todo-items-store'
 import './App.css'
 import { useEffect, useReducer, useState } from 'react'
-import {addItemToServer,readItemFromServer,deleteTodoFromServer} from './services/itemServices'
+import {addItemToServer,readItemFromServer,deleteTodoFromServer,updateTodoStatus} from './services/itemServices'
 
 const kaamsReducer=(kaams,action)=>{
   let newKaamsItems = kaams
@@ -20,6 +20,13 @@ const kaamsReducer=(kaams,action)=>{
   else if(action.type === "LOAD KAAM")
   {
     newKaamsItems  = action.payload.todo;
+  }
+
+  else if(action.type === "UPDATE_KAAM")
+  {
+    newKaamsItems  = kaams.map((kaam)=>{
+       return kaam.id === action.payload.todo._id ? {...kaam,completed:true} : kaam
+    })
   }
 
     return newKaamsItems;
@@ -69,7 +76,18 @@ function App() {
     dispatchkaams(DltKaamAction)
     
   }
-  
+   const handleUpdate = async (id) => {
+    const result = await updateTodoStatus(id);
+    const updateKaamAction = {
+      type: "UPDATE_KAAM",
+      payload: {
+        todo:result.todo,
+      }
+    }
+    dispatchkaams(updateKaamAction)
+    
+  }
+
   let handleOnChange = (e) => {
     const { name, value } = e.target;
     if (name === "task") {
@@ -91,6 +109,7 @@ function App() {
         NewKaamAdd,
         handleDelete,
         handleOnChange,
+        handleUpdate,
         task,      
         date,
         }

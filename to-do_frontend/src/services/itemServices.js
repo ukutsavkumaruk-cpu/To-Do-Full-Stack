@@ -56,9 +56,21 @@ export const deleteTodoFromServer = async (id) =>{
     const response = await fetch(`http://localhost:3009/api/todo/${id}`,{
       method:"DELETE",
     })
-    return await response.json();
   }
   catch (err) {
     console.log("Error occur while deleting",err)
+  }
+}
+export const updateTodoStatus =async(id) =>{
+  try{
+    const response = await fetch(`http://localhost:3009/api/todo/${id}/completed`,{
+      method:"PUT"
+    })
+    const result = await response.json();
+    console.log("This the response from server after updation : ",result)
+    return result;
+  }
+  catch (err){
+     console.log("Error occur while updating status.",err)
   }
 }

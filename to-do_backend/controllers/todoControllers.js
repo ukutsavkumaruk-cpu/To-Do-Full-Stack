@@ -32,9 +32,21 @@ exports.deleteTodoItem = async (req,res,next)=>{
   })
 }
 exports.updatedTodoItem = async (req,res,next)=>{
-  const id = req.params.id;
-  await todoItems.findByIdAndUpdate(id,{});
-  res.status(200).json({
-    message:"Todo updated successfully"
-  })
+  try{
+    const id = req.params.id;
+  const updatedTodo = await todoItems.findByIdAndUpdate(id,{completed:true},{ new: true, runValidators: true });
+  if (!updatedTodo) {
+      return res.status(404).json({
+        message: "Todo not found"
+      });
+    }
+
+    res.status(200).json({
+      message: "Todo updated successfully",
+      todo: updatedTodo
+    });
+  }
+  catch(err){
+    console.log("Error while status updation",err);
+  }
 }
