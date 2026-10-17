@@ -4,8 +4,8 @@ import Items from './components/Items'
 import WelcomeMsg from './components/WelcomeMsg'
 import {TodoItemsContext} from './store/todo-items-store'
 import './App.css'
-import { useReducer, useState } from 'react'
-import {addItemToServer} from './services/itemServices'
+import { useEffect, useReducer, useState } from 'react'
+import {addItemToServer,readItemFromServer,deleteTodoFromServer} from './services/itemServices'
 
 const kaamsReducer=(kaams,action)=>{
   let newKaamsItems = kaams
@@ -13,10 +13,14 @@ const kaamsReducer=(kaams,action)=>{
     {
       newKaamsItems = [...kaams, { task: action.payload.todo.task, date: action.payload.todo.date, id: action.payload.todo._id}];
     }
-    else if(action.type === "DELETE_KAAM")
+  else if(action.type === "DELETE_KAAM")
     {
-      newKaamsItems = kaams.filter((kaam, i) => { return (i !== action.payload.index) })
+      newKaamsItems = kaams.filter((kaam) => { return (kaam.id !== action.payload.id) })
     }
+  else if(action.type === "LOAD KAAM")
+  {
+    newKaamsItems  = action.payload.todo;
+  }
 
     return newKaamsItems;
 }
@@ -26,29 +30,40 @@ function App() {
   let [task, setTask] = useState("")
   let [date, setDate] = useState("")
   
-
+  useEffect(()=>{
+     readItemFromServer()
+      .then(data =>{
+        const readKaamsAction ={
+          type: "LOAD KAAM",
+          payload:{
+            todo:data
+          }
+        }
+         dispatchkaams(readKaamsAction)
+      })
+      .catch(err => console.log("Not Aable to read server beacause: ",err));
+  },[])
 
   const [kaams, dispatchkaams] = useReducer(kaamsReducer,[])
 
   const NewKaamAdd = async (newTask,newDate)=>{
-
     const serverItem = await addItemToServer(newTask,newDate)
     const newKaamAction = {
       type: "NEW_KAAM",
       payload: {
-        todo : serverItem.todo,
+        todo : serverItem,
       }
     }
     dispatchkaams(newKaamAction)
   }
   
 
-  const handleDelete = (index) => {
-    
+  const handleDelete = async (id) => {
+    await deleteTodoFromServer(id);
     const DltKaamAction = {
       type: "DELETE_KAAM",
       payload: {
-        index,
+        id,
       }
     }
     dispatchkaams(DltKaamAction)
@@ -66,9 +81,6 @@ function App() {
       setDate(value)
     }
   }
-
-  
-  
 
   return (
 

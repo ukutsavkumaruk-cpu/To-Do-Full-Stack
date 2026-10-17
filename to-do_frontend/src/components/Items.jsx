@@ -6,9 +6,9 @@ function Items() {
     
     
     return <>
-        {kaams.map((task, index) =>
-            <Task key={index} index={index}
-                work={task.task} date={task.date}
+        {kaams.map((item, index) =>
+            <Task key={index} id={item.id}
+                work={item.task} date={item.date}
              >
             </Task>)}
 

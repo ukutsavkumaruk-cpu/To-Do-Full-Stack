@@ -1,11 +1,14 @@
 const express = require('express')
-const {createTodoItem} = require('../controllers/todoControllers');
+const {createTodoItem,getTodoItem,deleteTodoItem} = require('../controllers/todoControllers');
 
 
 
 const tasksRouter = express.Router();
 
+tasksRouter.get("/",getTodoItem)
 tasksRouter.post("/",createTodoItem)
+tasksRouter.delete("/:id",deleteTodoItem)
+tasksRouter.put("/:id/completed",updatedTodoItem)
 
 
 
