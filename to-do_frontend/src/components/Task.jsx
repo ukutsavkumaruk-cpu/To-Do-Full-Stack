@@ -1,19 +1,46 @@
 import { useContext } from "react";
 import { TodoItemsContext } from "../store/todo-items-store";
+import { FiCalendar, FiCheck, FiClock, FiTrash2 } from "react-icons/fi";
 
 function Task({ work, date,id,completed}) {
   const {handleDelete,handleUpdate} = useContext(TodoItemsContext);
 
-  return (<div className="container margin">
-    <div className="row align-items-center task-row">
-      <div className="col-5 task-text">{work}</div>
-      <div className="col-4 task-date">{new Date(date).toLocaleDateString("en-IN")}</div>
-
-      <div className="col-3 d-flex justify-content-center">
-        <button type="button" className={`btn task-delete ${completed ? "btn-secondary" : "btn-success"}`}onClick={()=>{handleUpdate(id,completed)}}>{completed? "Completed" : "Due"}</button>
-        <button type="button" className="btn btn-danger task-delete" onClick={()=>{handleDelete(id)}}>Delete</button>
+  return (
+    <article className={`task-row${completed ? " is-completed" : ""}`}>
+      <span className="task-check" aria-hidden="true">
+        {completed ? <FiCheck /> : <FiClock />}
+      </span>
+      <div className="task-details">
+        <h4 className="task-text">{work}</h4>
+        <span className="task-date">
+          <FiCalendar aria-hidden="true" />
+          {new Date(date).toLocaleDateString("en-IN", {
+            day: "numeric",
+            month: "short",
+            year: "numeric",
+          })}
+        </span>
       </div>
-    </div>
-  </div>)
+      <div className="task-actions">
+        <button
+          type="button"
+          className={`btn task-status ${completed ? "status-completed" : "status-due"}`}
+          aria-pressed={completed}
+          onClick={() => handleUpdate(id, completed)}
+        >
+          {completed ? <FiCheck aria-hidden="true" /> : <FiClock aria-hidden="true" />}
+          {completed ? "Completed" : "Mark done"}
+        </button>
+        <button
+          type="button"
+          className="btn task-delete"
+          aria-label={`Delete ${work}`}
+          onClick={() => handleDelete(id)}
+        >
+          <FiTrash2 aria-hidden="true" />
+        </button>
+      </div>
+    </article>
+  )
 }
 export default Task;

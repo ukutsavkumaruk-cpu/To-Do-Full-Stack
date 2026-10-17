@@ -38,6 +38,7 @@ export const readItemFromServer = async () => {
     id : serveritem._id,
     task:serveritem.task,
     date:serveritem.date,
+    completed:serveritem.completed,
     createdAt:serveritem.createdAt,
     updatedAt:serveritem.updatedAt,
     }}
