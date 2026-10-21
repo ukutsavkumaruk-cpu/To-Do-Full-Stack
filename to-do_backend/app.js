@@ -3,7 +3,8 @@ const http = require('http')
 const todoItemsRouter = require('./routes/todoItemsRouter')
 const { get404 } = require('./controllers/errors');
 const { default: mongoose } = require('mongoose');
-const DB_URL = "mongodb+srv://ukutsavkumaruk_db_user:utsav1311@airbnbv1.3ajox3i.mongodb.net/todo"
+require('dotenv').config()
+const DB_URL = process.env.DB_URL;
 const cors = require("cors");
 
 
@@ -31,7 +32,7 @@ server.listen(PORT,()=>{
   console.log(`Server is running at http://localhost:${PORT}`)
 })
 }
-)
+  )
 .catch(err =>{
   console.log("Error occurs while connection to database.",err)
 })

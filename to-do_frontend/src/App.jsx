@@ -1,7 +1,7 @@
-import AppName from './components/AppName'
-import AddTodo from './components/AddTodo'
-import Items from './components/Items'
-import WelcomeMsg from './components/WelcomeMsg'
+import AppHeader from './components/AppHeader'
+import AppFooter from './components/AppFooter'
+import DashboardHero from './components/DashboardHero'
+import TodoPanel from './components/TodoPanel'
 import {TodoItemsContext} from './store/todo-items-store'
 import './App.css'
 import { useEffect, useReducer, useState } from 'react'
@@ -116,69 +116,14 @@ function App() {
         }
       }>
         <div className="app-content">
-          <header className="app-header">
-            <AppName />
-            <div className="workspace-label">
-              <span className="workspace-indicator" />
-              Your personal workspace
-            </div>
-          </header>
-
-          <section className="dashboard-hero" aria-labelledby="hero-title">
-            <div className="hero-copy">
-              <span className="hero-eyebrow">A LITTLE MORE FOCUS, EVERY DAY</span>
-              <h2 id="hero-title">Make space for<br />what matters.</h2>
-              <p>Small steps add up. Keep your day moving, one task at a time.</p>
-            </div>
-            <div className="hero-stats" aria-label="Task summary">
-              <div className="hero-stat">
-                <span className="stat-value">{kaams.length}</span>
-                <span className="stat-label">All tasks</span>
-              </div>
-              <div className="hero-stat">
-                <span className="stat-value">{pendingCount}</span>
-                <span className="stat-label">To do</span>
-              </div>
-              <div className="hero-stat">
-                <span className="stat-value">{completedCount}</span>
-                <span className="stat-label">Done</span>
-              </div>
-            </div>
-            <span className="hero-orb hero-orb-one" />
-            <span className="hero-orb hero-orb-two" />
-          </section>
-
-          <section className="todo-panel" aria-labelledby="todo-heading">
-            <div className="panel-heading">
-              <div>
-                <span className="section-eyebrow">YOUR DAY, YOUR PACE</span>
-                <h2 id="todo-heading">Task list<span className="heading-period">.</span></h2>
-                <p>Capture it here. Make it happen out there.</p>
-              </div>
-              <div className="date-chip">
-                <span className="date-chip-dot" />
-                {new Date().toLocaleDateString("en-IN", {
-                  weekday: "short",
-                  month: "short",
-                  day: "numeric",
-                })}
-              </div>
-            </div>
-
-            <AddTodo />
-
-            <div className="list-heading">
-              <h3>Your tasks</h3>
-              <span>{kaams.length} {kaams.length === 1 ? "item" : "items"}</span>
-            </div>
-            <WelcomeMsg />
-            <Items />
-          </section>
-
-          <footer className="app-footer">
-            <span className="footer-sparkle">✦</span>
-            One thing at a time. You’ve got this.
-          </footer>
+          <AppHeader />
+          <DashboardHero
+            taskCount={kaams.length}
+            pendingCount={pendingCount}
+            completedCount={completedCount}
+          />
+          <TodoPanel taskCount={kaams.length} />
+          <AppFooter />
         </div>
       </TodoItemsContext.Provider>
     </main>
